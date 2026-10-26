@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+:root[data-theme='light'] {
+  --c-bg: 242 245 247;
+  --c-surface: 255 255 255;
+  --c-sunken: 233 238 242;
+  --c-ink: 18 35 58;
+  --c-muted: 98 113 131;
+  --c-line: 216 223 230;
+  --c-accent: 11 122 133;
+  --c-accent-ink: 255 255 255;
+  --c-crit: 196 43 59;
+  --c-high: 213 115 27;
+  --c-med: 63 111 208;
+  --c-low: 106 122 141;
+  --c-ok: 28 134 84;
+  --c-warn: 176 118 0;
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --c-bg: 12 20 32;
+  --c-surface: 19 30 46;
+  --c-sunken: 26 39 58;
+  --c-ink: 228 235 243;
+  --c-muted: 139 156 176;
+  --c-line: 40 55 77;
+  --c-accent: 63 193 204;
+  --c-accent-ink: 8 22 34;
+  --c-crit: 255 107 120;
+  --c-high: 244 163 80;
+  --c-med: 120 160 245;
+  --c-low: 150 166 186;
+  --c-ok: 82 205 140;
+  --c-warn: 232 183 70;
+  color-scheme: dark;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'ss01' 1;
+}
+:focus-visible { outline: 2px solid rgb(var(--c-accent)); outline-offset: 2px; border-radius: 4px; }
+::selection { background: rgb(var(--c-accent) / 0.25); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+@layer components {
+  .panel { @apply rounded-lg border border-line bg-surface; }
+  .field-label { @apply mb-1 block text-sm font-medium text-ink; }
+  .input {
+    @apply w-full rounded border border-line bg-surface px-3 py-2 text-base text-ink placeholder:text-muted/70
+      disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .input[aria-invalid='true'] { @apply border-crit; }
+  .skeleton { @apply animate-pulse rounded bg-sunken; }
+  .th { @apply px-3 py-2 text-left text-xs font-medium text-muted; }
+}
+
+@keyframes rail-pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+.rail-breached { animation: rail-pulse 1.6s ease-in-out infinite; }

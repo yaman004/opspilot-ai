@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# env & secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# runtime data
+uploads/
+server/uploads/
+.data/
+*.log
+logs/
+
+# test artifacts
+playwright-report/
+test-results/
+e2e/.auth/
+
+# tooling / OS
+.DS_Store
+.vscode/
+.idea/
+.tools/

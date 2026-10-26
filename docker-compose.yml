@@ -1,0 +1,39 @@
+@echo off
+setlocal
+cd /d "%~dp0"
+echo.
+echo === OpsPilot AI: start ===
+echo.
+
+where node >nul 2>nul || (echo Node.js is not installed. Install the LTS version from https://nodejs.org and run this again. & pause & exit /b 1)
+
+docker info >nul 2>nul
+if errorlevel 1 (
+  echo Docker Desktop is not running. Start it, wait until it says "Engine running", then run this again.
+  pause
+  exit /b 1
+)
+
+if not exist node_modules (
+  echo Installing dependencies - this takes a few minutes the first time...
+  call npm install || (echo npm install failed. & pause & exit /b 1)
+)
+if not exist .env copy .env.example .env >nul
+
+echo Starting MongoDB and Redis...
+docker compose down >nul 2>nul
+call npm run services:up || (echo Could not start MongoDB/Redis. See the message above. & pause & exit /b 1)
+
+echo Waiting for the databases to be ready...
+timeout /t 12 /nobreak >nul
+
+echo Loading demo data...
+call npm run seed || (echo Seeding failed. See the message above. & pause & exit /b 1)
+
+echo.
+echo Starting the app. When you see "Local: http://localhost:5173", open that address in your browser.
+echo Log in as admin@demo.opspilot.test  /  DemoPassw0rd!
+echo Keep this window open. Press Ctrl+C to stop.
+echo.
+call npm run dev
+pause
